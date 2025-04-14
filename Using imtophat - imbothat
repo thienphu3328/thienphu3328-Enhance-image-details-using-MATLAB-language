@@ -1,0 +1,49 @@
+f = imread("D:\OneDrive\Desktop\ĐỒ ÁN TỐT NGHIỆP\Ảnh x quang\Phổi thường.png");
+
+% N = imnoise(f, 'salt & pepper', 0.05);
+%   
+A = f;
+
+se = strel('disk',5);
+
+fo = imopen(A,se);
+
+f2 = imtophat(A,se);
+
+f3 = imbothat(A,se);
+
+g = f + (f2 - f3);
+
+
+figure; 
+imshow(f);
+%title('a - ảnh gốc');
+
+% figure; 
+% imshow(A);
+% title('ảnh nhiễu');
+
+figure; 
+imshow(fo);
+%title('b - ảnh ngưỡng - imopen');
+ 
+figure; 
+imshow(f2);
+%title('c - ảnh nền - imtophat');
+
+figure; 
+imshow(f3);
+%title('d - ảnh xóa nền - imbothat');
+ 
+figure; 
+imshow(g);
+%title('e - ảnh ngưỡng mới');
+
+[peaksnr, snr] = psnr(g,f);
+fprintf('\n The Peak-SNR value is %0.4f', peaksnr);
+
+
+[ssimval,ssimmap] = ssim(g, f);
+figure;
+imshow(ssimmap,[])
+title(['Local SSIM Map with Global SSIM Value: ',num2str(ssimval)])
